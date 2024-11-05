@@ -30,4 +30,22 @@ const index = (req, res) => {
 	res.send(html)
 }
 
-module.exports = { show, index }
+const store = (req, res) => {
+	console.log(req.body)
+	const newPost = {
+		title: req.body.title,
+		slug: req.body.slug,
+		content: req.body.content,
+		image: req.body.image,
+		tags: req.body.tags
+	}
+	posts.push(newPost)
+
+	res.json({
+		status: 201,
+		data: posts,
+		counter: posts.length
+	})
+}
+
+module.exports = { show, index, store }
