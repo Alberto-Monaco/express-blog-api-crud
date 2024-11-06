@@ -1,4 +1,5 @@
 const posts = require('../db/db.js')
+const fs = require('fs')
 
 const show = (req, res) => {
 	const slug = req.params.slug
@@ -40,6 +41,7 @@ const store = (req, res) => {
 		tags: req.body.tags
 	}
 	posts.push(newPost)
+	fs.writeFileSync('./db/db.js', `module.exports = ${JSON.stringify(posts, null, 4)}`)
 
 	res.json({
 		status: 201,
@@ -60,12 +62,29 @@ const update = (req, res) => {
 	post.content = req.body.content
 	post.image = req.body.image
 	post.tags = req.body.tags
+	fs.writeFileSync('./db/db.js', `module.exports = ${JSON.stringify(posts, null, 4)}`)
 
 	res.status(200).json({
+		message: 'Post updated successfully',
 		status: 200,
-		data: post,
-		message: 'Post updated successfully'
+		data: post
 	})
 }
 
-module.exports = { show, index, store, update }
+const destroy = (req, res) => {
+	const post = posts.find((post) => post.slug === req.params.slug)
+	if (!post) {
+		return res.status(404).json({
+			message: `Post with slug ${req.params.slug} not found`
+		})
+	}
+	const newPost = posts.filter((post) => post.slug !== req.params.slug)
+	fs.writeFileSync('./db/db.js', `module.exports = ${JSON.stringify(newPost, null, 4)}`)
+	res.status(200).json({
+		message: 'Post deleted successfully',
+		data: newPost,
+		counter: newPost.length
+	})
+}
+
+module.exports = { show, index, store, update, destroy }
