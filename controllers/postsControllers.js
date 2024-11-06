@@ -48,4 +48,24 @@ const store = (req, res) => {
 	})
 }
 
-module.exports = { show, index, store }
+const update = (req, res) => {
+	const post = posts.find((post) => post.slug === req.params.slug)
+	if (!post) {
+		return res.status(404).json({
+			message: `Post with slug ${req.params.slug} not found`
+		})
+	}
+	post.title = req.body.title
+	post.slug = req.body.slug
+	post.content = req.body.content
+	post.image = req.body.image
+	post.tags = req.body.tags
+
+	res.status(200).json({
+		status: 200,
+		data: post,
+		message: 'Post updated successfully'
+	})
+}
+
+module.exports = { show, index, store, update }
