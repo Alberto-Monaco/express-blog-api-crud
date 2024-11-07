@@ -16,7 +16,7 @@ const show = (req, res) => {
 }
 
 const index = (req, res) => {
-	let html = '<ul>'
+	/*let html = '<ul>'
 	posts.forEach((post) => {
 		html += `
 		<li>
@@ -28,7 +28,12 @@ const index = (req, res) => {
 		`
 	})
 	html += '</ul>'
-	res.send(html)
+	res.send(html)*/
+	res.json({
+		status: 200,
+		data: posts,
+		counter: posts.length
+	})
 }
 
 const store = (req, res) => {
