@@ -21,6 +21,8 @@ app.use('/posts', postsRouter)
 app.use(notFound)
 
 app.use((err, req, res, next) => {
-	console.log(err)
-	res.status(500).json({ message: 'Internal Server Error' })
+	console.log('Error: ', err.message)
+	console.error(err.stack)
+
+	res.status(500).json({ message: 'Something went wrong', error: err.message })
 })
