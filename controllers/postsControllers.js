@@ -70,8 +70,8 @@ const update = (req, res) => {
 	fs.writeFileSync('./db/db.js', `module.exports = ${JSON.stringify(posts, null, 4)}`)
 
 	res.status(200).json({
-		message: 'Post updated successfully',
 		status: 200,
+		message: 'Post updated successfully',
 		data: post
 	})
 }
@@ -86,10 +86,30 @@ const destroy = (req, res) => {
 	const newPost = posts.filter((post) => post.slug !== req.params.slug)
 	fs.writeFileSync('./db/db.js', `module.exports = ${JSON.stringify(newPost, null, 4)}`)
 	res.status(200).json({
+		status: 200,
 		message: 'Post deleted successfully',
 		data: newPost,
 		counter: newPost.length
 	})
 }
 
-module.exports = { show, index, store, update, destroy }
+const filterTag = (req, res) => {
+	const tag = req.query.tag
+
+	if (!tag) {
+		return res.status(400).json({
+			message: 'Inserisci un tag valido'
+		})
+	}
+
+	const postsTag = posts.filter((post) => post.tags.includes(tag))
+
+	res.status(200).json({
+		status: 200,
+		message: 'tag found',
+		posts: postsTag,
+		numeroPost: postsTag.length
+	})
+}
+
+module.exports = { show, index, store, update, destroy, filterTag }
