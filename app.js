@@ -1,12 +1,13 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const notFound = require('./middleware/notmiddle.js')
 const logger = require('./middleware/logger.js')
 const postsRouter = require('./routes/posts.js')
 
 const PORT = process.env.PORT
 const HOST = process.env.HOST
-
+app.use(cors())
 app.use(express.static('public'))
 app.use(express.json())
 
